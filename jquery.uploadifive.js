@@ -8,31 +8,31 @@ Released under the MIT License
     var methods = {
 
         init : function(options) {
-            
+
             return this.each(function() {
 
                 // Create a reference to the jQuery DOM object
                 var $this = $(this);
-                    $this.data('uploadifive', {
-                        inputs     : {}, // The object that contains all the file inputs
-                        inputCount : 0,  // The total number of file inputs created
-                        fileID     : 0,
-                        queue      : {
-                             count      : 0, // Total number of files in the queue
-                             selected   : 0, // Number of files selected in the last select operation
-                             replaced   : 0, // Number of files replaced in the last select operation
-                             errors     : 0, // Number of files that returned an error in the last select operation
-                             queued     : 0, // Number of files added to the queue in the last select operation
-                             cancelled  : 0  // Total number of files that have been cancelled or removed from the queue
-                                     },
-                        uploads    : {
-                                         current    : 0, // Number of files currently being uploaded
-                                         attempts   : 0, // Number of file uploads attempted in the last upload operation
-                                         successful : 0, // Number of files successfully uploaded in the last upload operation
-                                         errors     : 0, // Number of files returning errors in the last upload operation
-                                         count      : 0  // Total number of files uploaded successfully
-                                     }
-                    });
+                $this.data('uploadifive', {
+                    inputs     : {}, // The object that contains all the file inputs
+                    inputCount : 0,  // The total number of file inputs created
+                    fileID     : 0,
+                    queue      : {
+                        count      : 0, // Total number of files in the queue
+                        selected   : 0, // Number of files selected in the last select operation
+                        replaced   : 0, // Number of files replaced in the last select operation
+                        errors     : 0, // Number of files that returned an error in the last select operation
+                        queued     : 0, // Number of files added to the queue in the last select operation
+                        cancelled  : 0  // Total number of files that have been cancelled or removed from the queue
+                    },
+                    uploads    : {
+                        current    : 0, // Number of files currently being uploaded
+                        attempts   : 0, // Number of file uploads attempted in the last upload operation
+                        successful : 0, // Number of files successfully uploaded in the last upload operation
+                        errors     : 0, // Number of files returning errors in the last upload operation
+                        count      : 0  // Total number of files uploaded successfully
+                    }
+                });
                 var $data = $this.data('uploadifive');
 
                 // Set the default options
@@ -103,14 +103,14 @@ Released under the MIT License
 
                 // Create a template for a file input
                 $data.inputTemplate = $('<input type="file">')
-                .css({
-                    'font-size' : settings.height + 'px',
-                    'opacity'   : 0,
-                    'position'  : 'absolute',
-                    'right'     : '-3px',
-                    'top'       : '-3px',
-                    'z-index'   : 999 
-                });
+                    .css({
+                        'font-size' : settings.height + 'px',
+                        'opacity'   : 0,
+                        'position'  : 'absolute',
+                        'right'     : '-3px',
+                        'top'       : '-3px',
+                        'z-index'   : 999
+                    });
 
                 // Create a new input
                 $data.createInput = function() {
@@ -264,9 +264,9 @@ Released under the MIT License
                         '<a class="close" href="#">X</a>' +
                         '<div><span class="filename"></span><span class="fileinfo"></span></div>' +
                         '<div class="progress">' +
-                            '<div class="progress-bar"></div>' +
+                        '<div class="progress-bar"></div>' +
                         '</div>' +
-                    '</div>');
+                        '</div>');
                 } else {
                     $data.queueItem = $(settings.itemTemplate);
                 }
@@ -282,8 +282,8 @@ Released under the MIT License
                         file.queueItem.attr('id', settings.id + '-file-' + $data.fileID++);
                         // Bind the close event to the close button
                         file.queueItem.find('.close').bind('click', function() {
-                           methods.cancel.call($this, file);
-                           return false;
+                            methods.cancel.call($this, file);
+                            return false;
                         });
                         var fileName = file.name;
                         if (fileName.length > settings.truncateLength && settings.truncateLength !== 0) {
@@ -318,7 +318,7 @@ Released under the MIT License
                         }
                         file.queueItem.find('.progress-bar').width(0);
                         file.queueItem.delay(delay).fadeOut(fadeTime, function() {
-                           $(this).remove();
+                            $(this).remove();
                         });
                         delete file.queueItem;
                         $data.queue.count--;
@@ -393,6 +393,14 @@ Released under the MIT License
                                 formData.append(i, settings.formData[i]);
                             }
 
+                            // Add custom data
+                            if( $data.settings.customData ) {
+                                var customData = $data.settings.customData();
+                                for (var i in customData) {
+                                    formData.append(i, customData[i]);
+                                }
+                            }
+
                             // Open the AJAX call
                             xhr.open(settings.method, settings.uploadScript, true);
 
@@ -438,7 +446,7 @@ Released under the MIT License
                                     eol      = '\r\n',
                                     binFile  = '';
 
-                                // Build an RFC2388 String 
+                                // Build an RFC2388 String
                                 binFile += dashes + boundary + eol;
                                 // Generate the headers
                                 binFile += 'Content-Disposition: form-data; name="' + settings.fileObjName + '"';
@@ -469,11 +477,11 @@ Released under the MIT License
                                     if (status == 404) {
                                         $data.error('404_FILE_NOT_FOUND', file, uploadAll);
                                     } else {
-                                        if (file.xhr.responseText != 'Invalid file type.') {    
+                                        if (file.xhr.responseText != 'Invalid file type.') {
                                             $data.uploadComplete(e, file, uploadAll);
                                         } else {
                                             $data.error(file.xhr.responseText, file, uploadAll);
-                                        } 
+                                        }
                                     }
                                 }, false);
 
@@ -540,9 +548,9 @@ Released under the MIT License
 
                         // Add the error class to the queue item
                         file.queueItem.addClass('error')
-                        // Output the error in the queue item
-                        .find('.fileinfo').html(' - ' + errorMsg);
-                        // Hide the 
+                            // Output the error in the queue item
+                            .find('.fileinfo').html(' - ' + errorMsg);
+                        // Hide the
                         file.queueItem.find('.progress').remove();
                     }
                     // Trigger the error event
@@ -609,19 +617,19 @@ Released under the MIT License
                     // Style the button wrapper
                     $data.button.css({
                         'height'      : settings.height,
-                        'line-height' : settings.height + 'px', 
+                        'line-height' : settings.height + 'px',
                         'overflow'    : 'hidden',
                         'position'    : 'relative',
-                        'text-align'  : 'center', 
+                        'text-align'  : 'center',
                         'width'       : settings.width
                     });
 
                     // Insert the button above the file input
                     $this.before($data.button)
-                    // Add the file input to the button
-                    .appendTo($data.button)
-                    // Modify the styles of the file input
-                    .hide();
+                        // Add the file input to the button
+                        .appendTo($data.button)
+                        // Modify the styles of the file input
+                        .hide();
 
                     // Create a new input
                     $data.createInput.call($this);
@@ -759,9 +767,9 @@ Released under the MIT License
                 if (typeof settings.onCancel === 'function') {
                     settings.onCancel.call($this, file);
                 }
-                
+
             });
-            
+
         },
 
         // Upload the files in the queue
@@ -842,7 +850,7 @@ Released under the MIT License
                 var $this    = $(this),
                     $data    = $this.data('uploadifive'),
                     settings = $data.settings;
-            
+
                 // Clear the queue
                 methods.clearQueue.call($this);
                 // Destroy the queue if it was created
@@ -851,8 +859,8 @@ Released under the MIT License
                 $this.siblings('input').remove();
                 // Show the original file input
                 $this.show()
-                // Move the file input out of the button
-                .insertBefore($data.button);
+                    // Move the file input out of the button
+                    .insertBefore($data.button);
                 // Delete the button
                 $data.button.remove();
                 // Trigger the destroy event
